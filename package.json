@@ -2,10 +2,35 @@
   "name": "pixelect",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "format": "prettier --write ./src",
+    "lint": "eslint ./src",
+    "cc": "npm run format && npm run lint",
+    "prebuild": "del-cli -f lib",
+    "build": "npm run cc && tsc",
+    "postbuild": "cpy res/* lib/",
+    "cpi": "nw --use-gl=egl --ignore-gpu-blocklist --disable-accelerated-2d-canvas --num-raster-threads=2 lib/",
+    "pc": "nw lib/"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "ben",
+  "devDependencies": {
+    "@types/nw.js": "^0.13.11",
+    "@typescript-eslint/eslint-plugin": "^4.17.0",
+    "@typescript-eslint/parser": "^4.17.0",
+    "cpy-cli": "^3.1.1",
+    "del-cli": "^3.0.1",
+    "eslint": "^7.21.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.3.1",
+    "prettier": "^2.2.1",
+    "tsc-watch": "^4.2.9",
+    "typescript": "^4.2.3"
+  },
+  "dependencies": {
+    "simple-node-logger": "^18.12.24"
+  }
 }

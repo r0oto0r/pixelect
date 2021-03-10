@@ -1,5 +1,8 @@
 {
-    "main": "index.js",
+    "main": "index.html",
     "name": "pixelect",
-    "chromium-args": "--mixed-context"
+    "chromium-args": "--mixed-context",
+    "window": {
+        "toolbar": true
+    }
 }

@@ -7,14 +7,18 @@
     "format": "prettier --write ./src",
     "lint": "eslint ./src",
     "cc": "npm run format && npm run lint",
-    "prebuild": "del-cli -f lib",
-    "build": "npm run cc && tsc",
+    "prebuild": "del-cli -f lib && del-cli -f tmp",
+    "babel": "babel tmp -d lib",
+    "build": "npm run cc && tsc && npm run babel",
     "postbuild": "cpy res/* lib/",
     "cpi": "nw --use-gl=egl --ignore-gpu-blocklist --disable-accelerated-2d-canvas --num-raster-threads=2 lib/",
     "pc": "nw --remote-debugging-port=9222 lib/"
   },
   "author": "ben",
   "devDependencies": {
+    "@babel/cli": "^7.13.10",
+    "@babel/core": "^7.13.10",
+    "@babel/preset-env": "^7.13.10",
     "@types/nw.js": "^0.13.11",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
     "@typescript-eslint/parser": "^4.17.0",
@@ -30,5 +34,7 @@
     "tsc-watch": "^4.2.9",
     "typescript": "^4.2.3"
   },
-  "dependencies": {}
+  "dependencies": {
+    "excalibur": "^0.24.5"
+  }
 }

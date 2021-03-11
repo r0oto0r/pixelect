@@ -3,6 +3,11 @@
     "name": "pixelect",
     "chromium-args": "--mixed-context",
     "window": {
-        "toolbar": true
+        "height": 240,
+        "width": 320,
+        "title": false,
+        "frame": false,
+        "resizable": false,
+        "fullscreen": false
     }
 }

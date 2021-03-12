@@ -1,33 +1,52 @@
 import * as ex from 'excalibur';
+import { Face } from './Face';
+import { FacesTexture } from './Textures';
 
 nw.Window.get().showDevTools();
 
-const game = new ex.Engine({
-	width: 320,
-	height: 240,
-	backgroundColor: ex.Color.Red,
-	scrollPreventionMode: ex.ScrollPreventionMode.All
-});
+class GameEngine {
+	private game: ex.Engine;
+	private mainScene: ex.Scene;
 
-const mainScene = new ex.Scene(game);
+	constructor(
+		width?: number,
+		height?: number,
+		backgroundColor?: ex.Color,
+		scrollPreventionMode?: ex.ScrollPreventionMode
+	) {
+		this.game = new ex.Engine({
+			width,
+			height,
+			backgroundColor,
+			scrollPreventionMode
+		});
+		this.mainScene = new ex.Scene(this.game);
+		this.game.addScene('mainScene', this.mainScene);
+	}
 
-window.onload = function () {
-	const box = new ex.Actor({
-		x: 0,
-		y: 0,
-		width: 180,
-		height: 240,
-		color: ex.Color.Black
-	});
+	public async run(): Promise<void> {
+		const loader = new ex.Loader([FacesTexture]);
+		loader.suppressPlayButton = true;
+		try {
+			await this.game.start(loader);
+			this.game.goToScene('mainScene');
 
-	mainScene.camera.x = 0;
-	mainScene.camera.y = 0;
+			const face = new Face(this.game, 160, 120, FacesTexture);
+			face.makeFace('idle');
+			setInterval(() => {
+				face.makeFace('blink');
+				setTimeout(() => face.makeFace('idle'), 60);
+			}, 2000);
+			setTimeout(() => face.makeFace('angry'), 4500);
+			setTimeout(() => face.makeFace('happy'), 6500);
+			setTimeout(() => face.makeFace('idle'), 8500);
+			this.mainScene.add(face);
+		} catch (error) {
+			console.error(error);
+		}
+	}
+}
 
-	mainScene.add(box);
-	game.addScene('mainScene', mainScene);
+const gameEngine = new GameEngine(320, 240, ex.Color.Yellow, ex.ScrollPreventionMode.All);
 
-	game.start();
-
-	game.goToScene('mainScene');
-	console.log(box.pos);
-};
+window.onload = () => gameEngine.run();
